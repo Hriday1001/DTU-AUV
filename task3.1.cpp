@@ -29,16 +29,6 @@ void getContours(Mat imgDil , Mat img){
             
         drawContours(img,conPoly,i,Scalar(0,255,0),2);
         cout<<conPoly[i]<<endl;
-        //boundRect[i]= boundingRect(conPoly[i]);
-            
-        //rectangle(img,boundRect[i].tl(),boundRect[i].br(),Scalar(0,0,255),2);
-            /*
-              int x1 = boundRect[0].x;
-              int y1 = boundRect[0].y;
-              int x2 = boundRect[1].x + boundRect[1].width;
-              int y2 = boundRect[1].y + boundRect[1].height;*/
-            
-            //rectangle(img,boundRect[j].br(),boundRect[j+1].tl(),Scalar(0,0,255),1);
             circle(img,{345,280},4,Scalar(0,0,255),4);
             circle(img,{327,127},4,Scalar(0,0,255),4);                
             circle(img,{369,197},4,Scalar(0,0,255),4);
