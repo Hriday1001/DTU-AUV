@@ -67,14 +67,11 @@ int main(){
 
     getContours(mask,img);
     
-   // putText(img,"Dark Green",cont);
+   
 
     imshow("Image",img);
     imshow("mask",mask);
-    // imshow("Gray Image",imgGray);
-    // imshow("Blur Image",imgBlur);
-    // imshow("Canny Image",imgCanny);
-    // imshow("Dialated Image",imgDil);
+
     waitKey(0);
     
 }
