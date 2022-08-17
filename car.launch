@@ -1,0 +1,15 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="pause" default="false" />
+  <arg name="debug" default="false" />
+  <arg name="world" value="$(find mcm_description)/worlds/MYROBOT.world"/>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    
+    <arg name="world_name" value="$(arg world)" />
+  <arg name="debug" value="$(arg debug)" />
+  <arg name="gui" value="$(arg gui)" />
+  <arg name="paused" value="$(arg pause)" />
+    <!-- more default parameters can be changed here -->
+  </include>
+</launch>
