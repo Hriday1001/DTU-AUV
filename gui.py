@@ -112,24 +112,30 @@ class Ui_MainWindow(object):
         self.killswitch.setGeometry(QtCore.QRect(660, 500, 151, 51))
         self.killswitch.setObjectName("killswitch")
         self.killswitch.clicked.connect(self.killswitchcontrol)
-        self.spinBox = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox.setGeometry(QtCore.QRect(710, 640, 48, 24))
-        self.spinBox.setObjectName("spinBox")
-        self.spinBox_2 = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox_2.setGeometry(QtCore.QRect(560, 700, 48, 24))
-        self.spinBox_2.setObjectName("spinBox_2")
-        self.spinBox_3 = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox_3.setGeometry(QtCore.QRect(650, 700, 48, 24))
-        self.spinBox_3.setObjectName("spinBox_3")
-        self.spinBox_4 = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox_4.setGeometry(QtCore.QRect(760, 700, 48, 24))
-        self.spinBox_4.setObjectName("spinBox_4")
-        self.spinBox_5 = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox_5.setGeometry(QtCore.QRect(860, 700, 48, 24))
-        self.spinBox_5.setObjectName("spinBox_5")
-        self.spinBox_6 = QtWidgets.QSpinBox(self.centralwidget)
-        self.spinBox_6.setGeometry(QtCore.QRect(710, 770, 48, 24))
-        self.spinBox_6.setObjectName("spinBox_6")
+        self.rightthruster = QtWidgets.QSpinBox(self.centralwidget)
+        self.rightthruster.setGeometry(QtCore.QRect(710, 640, 48, 24))
+        self.rightthruster.setObjectName("rightthruster")
+        self.rightthruster.valueChanged.connect(self.rightthrustercontrol)
+        self.forwardthruster = QtWidgets.QSpinBox(self.centralwidget)
+        self.forwardthruster.setGeometry(QtCore.QRect(560, 700, 48, 24))
+        self.forwardthruster.setObjectName("forwardthruster")
+        self.forwardthruster.valueChanged.connect(self.forwardthrustercontrol)
+        self.bottomfthruster = QtWidgets.QSpinBox(self.centralwidget)
+        self.bottomfthruster.setGeometry(QtCore.QRect(650, 700, 48, 24))
+        self.bottomfthruster.setObjectName("bottomfthruster")
+        self.bottomfthruster.valueChanged.connect(self.bottomfthrustercontrol)
+        self.bottombthruster = QtWidgets.QSpinBox(self.centralwidget)
+        self.bottombthruster.setGeometry(QtCore.QRect(760, 700, 48, 24))
+        self.bottombthruster.setObjectName("bottombthruster")
+        self.bottombthruster.valueChanged.connect(self.bottombthrustercontrol)
+        self.backwardthruster= QtWidgets.QSpinBox(self.centralwidget)
+        self.backwardthruster.setGeometry(QtCore.QRect(860, 700, 48, 24))
+        self.backwardthruster.setObjectName("backwardthruster")
+        self.backwardthruster.valueChanged.connect(self.backwardthrustercontrol)
+        self.leftthruster = QtWidgets.QSpinBox(self.centralwidget)
+        self.leftthruster.setGeometry(QtCore.QRect(710, 770, 48, 24))
+        self.leftthruster.setObjectName("leftthruster")
+        self.leftthruster.valueChanged.connect(self.leftthrustercontrol)
         self.gripperspinbox = QtWidgets.QSpinBox(self.centralwidget)
         self.gripperspinbox.setGeometry(QtCore.QRect(1170, 80, 48, 24))
         self.gripperspinbox.setObjectName("gripperspinbox")
@@ -212,6 +218,24 @@ class Ui_MainWindow(object):
         pass
 
     def killswitchcontrol(self):
+        pass
+
+    def rightthrustercontrol(self):
+        pass
+
+    def forwardthrustercontrol(self):
+        pass
+
+    def bottomfthrustercontrol(self):
+        pass
+
+    def bottombthrustercontrol(self):
+        pass
+
+    def backwardthrustercontrol(self):
+        pass
+
+    def leftthrustercontrol(self):
         pass
     
     def retranslateUi(self, MainWindow):
