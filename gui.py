@@ -20,6 +20,7 @@ from pyfirmata import ArduinoMega, SERVO
 # pin = 10
 # board.digital[pin].mode = SERVO
 
+# setting up communication with arduino
 global ser
 ser = serial.Serial('/dev/cu.usbmodem101', baudrate=9600, timeout=1,
                     parity=serial.PARITY_NONE,
@@ -42,6 +43,7 @@ class Ui_MainWindow(object):
         self.stopbutton = QtWidgets.QPushButton(self.centralwidget)
         self.stopbutton.setGeometry(QtCore.QRect(380, 500, 171, 51))
         self.stopbutton.setObjectName("stopbutton")
+        # gripper initialisation with min , max and set values
         self.gripperslider = QtWidgets.QSlider(self.centralwidget)
         self.gripperslider.setGeometry(QtCore.QRect(1070, 110, 281, 91))
         self.gripperslider.setOrientation(QtCore.Qt.Horizontal)
@@ -84,6 +86,7 @@ class Ui_MainWindow(object):
         self.label_11 = QtWidgets.QLabel(self.centralwidget)
         self.label_11.setGeometry(QtCore.QRect(710, 670, 60, 16))
         self.label_11.setObjectName("label_11")
+        # surge initialisation with min , max and set values
         self.surgeslider = QtWidgets.QSlider(self.centralwidget)
         self.surgeslider.setGeometry(QtCore.QRect(1080, 300, 22, 160))
         self.surgeslider.setOrientation(QtCore.Qt.Vertical)
@@ -92,6 +95,7 @@ class Ui_MainWindow(object):
         self.surgeslider.setMaximum(1700)
         self.surgeslider.setValue(1500)
         self.surgeslider.valueChanged.connect(self.surgeslidercontrol)
+        # yaw initialisation with min , max and set values
         self.yawslider = QtWidgets.QSlider(self.centralwidget)
         self.yawslider.setGeometry(QtCore.QRect(1230, 290, 22, 160))
         self.yawslider.setOrientation(QtCore.Qt.Vertical)
@@ -100,6 +104,7 @@ class Ui_MainWindow(object):
         self.yawslider.setMaximum(1700)
         self.yawslider.setValue(1500)
         self.yawslider.valueChanged.connect(self.yawslidercontrol)
+        # sway initialisation with min , max and set values
         self.swayslider = QtWidgets.QSlider(self.centralwidget)
         self.swayslider.setGeometry(QtCore.QRect(1360, 290, 22, 160))
         self.swayslider.setOrientation(QtCore.Qt.Vertical)
@@ -112,26 +117,32 @@ class Ui_MainWindow(object):
         self.killswitch.setGeometry(QtCore.QRect(660, 500, 151, 51))
         self.killswitch.setObjectName("killswitch")
         self.killswitch.clicked.connect(self.killswitchcontrol)
+        # yaw right thruster initialisation with min , max and set values
         self.rthruster = QtWidgets.QSpinBox(self.centralwidget)
         self.rthruster.setGeometry(QtCore.QRect(710, 640, 48, 24))
         self.rthruster.setObjectName("rthruster")
         self.rthruster.valueChanged.connect(self.rthrustercontrol)
+        # surge thruster1 initialisation with min , max and set values
         self.fthruster1 = QtWidgets.QSpinBox(self.centralwidget)
         self.fthruster1.setGeometry(QtCore.QRect(560, 700, 48, 24))
         self.fthruster1.setObjectName("fthruster1")
         self.fthruster1.valueChanged.connect(self.fthruster1control)
+        # depth thruster1 initialisation with min , max and set values
         self.dthruster1 = QtWidgets.QSpinBox(self.centralwidget)
         self.dthruster1.setGeometry(QtCore.QRect(650, 700, 48, 24))
         self.dthruster1.setObjectName("dthruster1")
         self.dthruster1.valueChanged.connect(self.dthruster1control)
+        # depth thruster2 initialisation with min , max and set values
         self.dthruster2 = QtWidgets.QSpinBox(self.centralwidget)
         self.dthruster2.setGeometry(QtCore.QRect(760, 700, 48, 24))
         self.dthruster2.setObjectName("dthruster2")
         self.dthruster2.valueChanged.connect(self.dthruster2control)
+        # surge thruster2 initialisation with min , max and set values
         self.fthruster2= QtWidgets.QSpinBox(self.centralwidget)
         self.fthruster2.setGeometry(QtCore.QRect(860, 700, 48, 24))
         self.fthruster2.setObjectName("fthruster2")
         self.fthruster2.valueChanged.connect(self.fthruster2control)
+        # yaw left thruster initialisation with min , max and set values
         self.lthruster = QtWidgets.QSpinBox(self.centralwidget)
         self.lthruster.setGeometry(QtCore.QRect(710, 770, 48, 24))
         self.lthruster.setObjectName("lthruster")
@@ -190,12 +201,26 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def gripperslidercontrol(self):
-        endAngle = self.gripperslider.value()
+        self.dthruster1.setValue(1500)
+        self.dthruster2.setValue(1500)
+        self.fthruster1.setValue(1500)
+        self.fthruster2.setValue(1500)
+        self.rthruster.setValue(1500)
+        self.lthruster.setValue(1500)
+        val = self.gripperslider.value()
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(val) + '/').encode())
         # for angle in range(0, endAngle):
         #     board.digital[pin].write(angle)
 
     def gripperspinboxcontrol(self):
-        endAngle = self.gripperspinbox.value()
+        self.dthruster1.setValue(1500)
+        self.dthruster2.setValue(1500)
+        self.fthruster1.setValue(1500)
+        self.fthruster2.setValue(1500)
+        self.rthruster.setValue(1500)
+        self.lthruster.setValue(1500)
+        val = self.gripperspinbox.value()
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(val) + '/').encode())
         # for angle in range(0, endAngle):
         #     board.digital[pin].write(angle)
     
