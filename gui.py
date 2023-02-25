@@ -21,11 +21,11 @@ from pyfirmata import ArduinoMega, SERVO
 # board.digital[pin].mode = SERVO
 
 global ser
-# ser = serial.Serial('/dev/cu.usbmodem101', baudrate=9600, timeout=1,
-#                     parity=serial.PARITY_NONE,
-#                     stopbits=serial.STOPBITS_ONE,
-#                     bytesize=serial.EIGHTBITS
-#                     )
+ser = serial.Serial('/dev/cu.usbmodem101', baudrate=9600, timeout=1,
+                    parity=serial.PARITY_NONE,
+                    stopbits=serial.STOPBITS_ONE,
+                    bytesize=serial.EIGHTBITS
+                    )
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -207,7 +207,7 @@ class Ui_MainWindow(object):
         val = self.surgeslider.value()
         self.rthruster.setValue(val)
         self.lthruster.setValue(val)
-        ser.write(str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/')
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
 
 
     def surgespinboxcontrol(self):
@@ -218,7 +218,7 @@ class Ui_MainWindow(object):
         val = self.surgespinbox.value()
         self.fthruster1.setValue(val)
         self.fthruster2.setValue(val)
-        ser.write(str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/')
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
 
     def yawslidercontrol(self):
         self.dthruster1.setValue(1500)
@@ -229,7 +229,7 @@ class Ui_MainWindow(object):
         self.rthruster.setValue(val)
         negvalue = val-1500
         self.lthruster.setValue(1500-negvalue)
-        ser.write(str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/')
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
 
     def yawspinboxcontrol(self):
         self.dthruster1.setValue(1500)
@@ -240,7 +240,7 @@ class Ui_MainWindow(object):
         self.rthruster.setValue(val)
         negvalue = val-1500
         self.lthruster.setValue(1500-negvalue)
-        ser.write(str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/')
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
 
     def swayslidercontrol(self):
         self.dthruster1.setValue(1500)
@@ -250,7 +250,7 @@ class Ui_MainWindow(object):
         val = self.swayslider.value()
         self.rthruster.setValue(val)
         self.lthruster.setValue(val)
-        ser.write(str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/')
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
 
     def swayspinboxcontrol(self):
         self.dthruster1.setValue(1500)
@@ -260,7 +260,7 @@ class Ui_MainWindow(object):
         val = self.swayspinbox.value()
         self.rthruster.setValue(val)
         self.lthruster.setValue(val)
-        ser.write(str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/')
+        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
 
     def killswitchcontrol(self):
         pass
