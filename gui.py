@@ -20,9 +20,15 @@ from pyfirmata import ArduinoMega, SERVO
 # pin = 10
 # board.digital[pin].mode = SERVO
 
-# setting up communication with arduino
-global ser
-ser = serial.Serial('/dev/cu.usbmodem101', baudrate=9600, timeout=1,
+global ser,fthruster1,fthruster2,lthruster,rthruster,dthruster1,dthruster2,claw
+fthruster1 = 1500
+fthruster2 = 1500
+lthruster = 1500
+rthruster = 1500
+dthruster1 = 1500
+dthruster2 = 1500
+claw = 100
+ser = serial.Serial('/dev/cu.usbmodem1101', baudrate=9600, timeout=1,
                     parity=serial.PARITY_NONE,
                     stopbits=serial.STOPBITS_ONE,
                     bytesize=serial.EIGHTBITS
@@ -34,16 +40,48 @@ class Ui_MainWindow(object):
         MainWindow.resize(1470, 920)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        self.graphicsView.setGeometry(QtCore.QRect(70, 20, 831, 461))
-        self.graphicsView.setObjectName("graphicsView")
+        # self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        # self.gridLayout.setObjectName("gridLayout")
+        # self.horizontalLayout = QtWidgets.QHBoxLayout()
+        # self.horizontalLayout.setObjectName("horizontalLayout")
+        # self.label = QtWidgets.QLabel(self.centralwidget)
+        # self.label.setText("")
+        # self.label.setPixmap(QtGui.QPixmap("images/H.png"))
+        # self.label.setObjectName("label")
+        # self.horizontalLayout.addWidget(self.label)
+        # self.brightslider = QtWidgets.QSlider(self.centralwidget)
+        # self.brightslider.setGeometry(QtCore.QRect(20, 100, 22, 261))
+        # self.brightslider.setOrientation(QtCore.Qt.Vertical)
+        # self.brightslider.setObjectName("brightslider")
+        # self.gridLayout.addWidget(self.brightslider, 0, 0, 1, 1)
+        # self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        # self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        # self.label_2.setObjectName("label_2")
+        # self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
+        # self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        # self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        # self.label_3.setObjectName("label_3")
+        # self.gridLayout.addWidget(self.label_3, 1, 1, 1, 1)
+        # self.horizontalLayout.addLayout(self.gridLayout)
+        # self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton.setObjectName("pushButton")
+        # self.horizontalLayout.addWidget(self.pushButton)
+        # self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton_2.setObjectName("pushButton_2")
+        # self.horizontalLayout.addWidget(self.pushButton_2)
+        # self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton_3.setObjectName("pushButton_3")
+        # self.horizontalLayout.addWidget(self.pushButton_3)
+        # spacerItem = QtWidgets.QSpacerItem(313, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        # self.gridLayout.addItem(spacerItem, 1, 1, 1, 1)
+
+
         self.startbutton = QtWidgets.QPushButton(self.centralwidget)
         self.startbutton.setGeometry(QtCore.QRect(130, 500, 151, 51))
         self.startbutton.setObjectName("startbutton")
         self.stopbutton = QtWidgets.QPushButton(self.centralwidget)
         self.stopbutton.setGeometry(QtCore.QRect(380, 500, 171, 51))
         self.stopbutton.setObjectName("stopbutton")
-        # gripper initialisation with min , max and set values
         self.gripperslider = QtWidgets.QSlider(self.centralwidget)
         self.gripperslider.setGeometry(QtCore.QRect(1070, 110, 281, 91))
         self.gripperslider.setOrientation(QtCore.Qt.Horizontal)
@@ -52,13 +90,11 @@ class Ui_MainWindow(object):
         self.gripperslider.setMaximum(145)
         self.gripperslider.setValue(110)
         self.gripperslider.valueChanged.connect(self.gripperslidercontrol)
+        self.gripperslider.valueChanged.connect(self.update_gripperspinbox)
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(1160, 190, 101, 31))
         self.label.setObjectName("label")
-        self.brightslider = QtWidgets.QSlider(self.centralwidget)
-        self.brightslider.setGeometry(QtCore.QRect(20, 100, 22, 261))
-        self.brightslider.setOrientation(QtCore.Qt.Vertical)
-        self.brightslider.setObjectName("brightslider")
+        
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(10, 380, 71, 16))
         self.label_2.setObjectName("label_2")
@@ -68,25 +104,6 @@ class Ui_MainWindow(object):
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setGeometry(QtCore.QRect(1350, 160, 31, 31))
         self.label_5.setObjectName("label_5")
-        self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(550, 740, 60, 16))
-        self.label_6.setObjectName("label_6")
-        self.label_7 = QtWidgets.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(650, 740, 60, 16))
-        self.label_7.setObjectName("label_7")
-        self.label_8 = QtWidgets.QLabel(self.centralwidget)
-        self.label_8.setGeometry(QtCore.QRect(760, 740, 60, 16))
-        self.label_8.setObjectName("label_8")
-        self.label_9 = QtWidgets.QLabel(self.centralwidget)
-        self.label_9.setGeometry(QtCore.QRect(850, 740, 60, 16))
-        self.label_9.setObjectName("label_9")
-        self.label_10 = QtWidgets.QLabel(self.centralwidget)
-        self.label_10.setGeometry(QtCore.QRect(710, 800, 60, 16))
-        self.label_10.setObjectName("label_10")
-        self.label_11 = QtWidgets.QLabel(self.centralwidget)
-        self.label_11.setGeometry(QtCore.QRect(710, 670, 60, 16))
-        self.label_11.setObjectName("label_11")
-        # surge initialisation with min , max and set values
         self.surgeslider = QtWidgets.QSlider(self.centralwidget)
         self.surgeslider.setGeometry(QtCore.QRect(1080, 300, 22, 160))
         self.surgeslider.setOrientation(QtCore.Qt.Vertical)
@@ -94,8 +111,11 @@ class Ui_MainWindow(object):
         self.surgeslider.setMinimum(1300)
         self.surgeslider.setMaximum(1700)
         self.surgeslider.setValue(1500)
+        self.surgeslider.setTickInterval(10)
+        self.surgeslider.setSingleStep(10)
+        self.surgeslider.setPageStep(10)
         self.surgeslider.valueChanged.connect(self.surgeslidercontrol)
-        # yaw initialisation with min , max and set values
+        self.surgeslider.valueChanged.connect(self.update_surgespinbox)
         self.yawslider = QtWidgets.QSlider(self.centralwidget)
         self.yawslider.setGeometry(QtCore.QRect(1230, 290, 22, 160))
         self.yawslider.setOrientation(QtCore.Qt.Vertical)
@@ -103,8 +123,9 @@ class Ui_MainWindow(object):
         self.yawslider.setMinimum(1300)
         self.yawslider.setMaximum(1700)
         self.yawslider.setValue(1500)
+        self.yawslider.setSingleStep(10)
         self.yawslider.valueChanged.connect(self.yawslidercontrol)
-        # sway initialisation with min , max and set values
+        self.yawslider.valueChanged.connect(self.update_yawspinbox)
         self.swayslider = QtWidgets.QSlider(self.centralwidget)
         self.swayslider.setGeometry(QtCore.QRect(1360, 290, 22, 160))
         self.swayslider.setOrientation(QtCore.Qt.Vertical)
@@ -112,41 +133,32 @@ class Ui_MainWindow(object):
         self.swayslider.setMinimum(1300)
         self.swayslider.setMaximum(1700)
         self.swayslider.setValue(1500)
+        self.swayslider.setSingleStep(10)
         self.swayslider.valueChanged.connect(self.swayslidercontrol)
+        self.swayslider.valueChanged.connect(self.update_swayspinbox)
+        self.heaveslider = QtWidgets.QSlider(self.centralwidget)
+        self.heaveslider.setGeometry(QtCore.QRect(20, 100, 22, 261))
+        self.heaveslider.setOrientation(QtCore.Qt.Vertical)
+        self.heaveslider.setObjectName("heaveslider")
+        self.heaveslider.setMinimum(1300)
+        self.heaveslider.setMaximum(1700)
+        self.heaveslider.setValue(1500)
+        self.heaveslider.setSingleStep(10)
+        self.heaveslider.valueChanged.connect(self.heaveslidercontrol)
+        self.heaveslider.valueChanged.connect(self.update_heavespinbox)
+        self.heavespinbox = QtWidgets.QSpinBox(self.centralwidget)
+        self.heavespinbox.setGeometry(QtCore.QRect(50, 250, 48, 24))
+        self.heavespinbox.setObjectName("heavespinbox")
+        self.heavespinbox.setMinimum(1300)
+        self.heavespinbox.setMaximum(1700)
+        self.heavespinbox.setValue(1500)
+        self.heavespinbox.setSingleStep(5)
+        self.heavespinbox.valueChanged.connect(self.heavespinboxcontrol)
+        # self.swayslider.valueChanged.connect(self.update_heavespinbox)
         self.killswitch = QtWidgets.QPushButton(self.centralwidget)
         self.killswitch.setGeometry(QtCore.QRect(660, 500, 151, 51))
         self.killswitch.setObjectName("killswitch")
         self.killswitch.clicked.connect(self.killswitchcontrol)
-        # yaw right thruster initialisation with min , max and set values
-        self.rthruster = QtWidgets.QSpinBox(self.centralwidget)
-        self.rthruster.setGeometry(QtCore.QRect(710, 640, 48, 24))
-        self.rthruster.setObjectName("rthruster")
-        self.rthruster.valueChanged.connect(self.rthrustercontrol)
-        # surge thruster1 initialisation with min , max and set values
-        self.fthruster1 = QtWidgets.QSpinBox(self.centralwidget)
-        self.fthruster1.setGeometry(QtCore.QRect(560, 700, 48, 24))
-        self.fthruster1.setObjectName("fthruster1")
-        self.fthruster1.valueChanged.connect(self.fthruster1control)
-        # depth thruster1 initialisation with min , max and set values
-        self.dthruster1 = QtWidgets.QSpinBox(self.centralwidget)
-        self.dthruster1.setGeometry(QtCore.QRect(650, 700, 48, 24))
-        self.dthruster1.setObjectName("dthruster1")
-        self.dthruster1.valueChanged.connect(self.dthruster1control)
-        # depth thruster2 initialisation with min , max and set values
-        self.dthruster2 = QtWidgets.QSpinBox(self.centralwidget)
-        self.dthruster2.setGeometry(QtCore.QRect(760, 700, 48, 24))
-        self.dthruster2.setObjectName("dthruster2")
-        self.dthruster2.valueChanged.connect(self.dthruster2control)
-        # surge thruster2 initialisation with min , max and set values
-        self.fthruster2= QtWidgets.QSpinBox(self.centralwidget)
-        self.fthruster2.setGeometry(QtCore.QRect(860, 700, 48, 24))
-        self.fthruster2.setObjectName("fthruster2")
-        self.fthruster2.valueChanged.connect(self.fthruster2control)
-        # yaw left thruster initialisation with min , max and set values
-        self.lthruster = QtWidgets.QSpinBox(self.centralwidget)
-        self.lthruster.setGeometry(QtCore.QRect(710, 770, 48, 24))
-        self.lthruster.setObjectName("lthruster")
-        self.lthruster.valueChanged.connect(self.lthrustercontrol)
         self.gripperspinbox = QtWidgets.QSpinBox(self.centralwidget)
         self.gripperspinbox.setGeometry(QtCore.QRect(1170, 80, 48, 24))
         self.gripperspinbox.setObjectName("gripperspinbox")
@@ -197,95 +209,115 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        # self.th = {}
+        # self.pushButton_2.clicked.connect(self.run_threads)
+        # self.pushButton_3.clicked.connect(self.run_threads)
+        # QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        # self.brightness_value_now = 0
+        # self.started = False
+
+
+
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        # self.brightslider.valueChanged['int'].connect(self.brightness_value)
 
     def gripperslidercontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.fthruster1.setValue(1500)
-        self.fthruster2.setValue(1500)
-        self.rthruster.setValue(1500)
-        self.lthruster.setValue(1500)
-        val = self.gripperslider.value()
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(val) + '/').encode())
+        gripval = self.gripperslider.value()
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
+        self.gripperslider.setValue(gripval)
         # for angle in range(0, endAngle):
         #     board.digital[pin].write(angle)
 
     def gripperspinboxcontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.fthruster1.setValue(1500)
-        self.fthruster2.setValue(1500)
-        self.rthruster.setValue(1500)
-        self.lthruster.setValue(1500)
-        val = self.gripperspinbox.value()
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(val) + '/').encode())
+        gripval = self.gripperspinbox.value()
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
         # for angle in range(0, endAngle):
         #     board.digital[pin].write(angle)
     
     def surgeslidercontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.fthruster1.setValue(1500)
-        self.fthruster2.setValue(1500)
-        val = self.surgeslider.value()
-        self.rthruster.setValue(val)
-        self.lthruster.setValue(val)
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
-
+        
+            val = self.surgeslider.value()
+            gripval = self.gripperspinbox.value()
+            fthruster1 = val
+            fthruster2 = val
+            ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
+            self.surgeslider.setValue(val) 
 
     def surgespinboxcontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.lthruster.setValue(1500)
-        self.rthruster.setValue(1500)
         val = self.surgespinbox.value()
-        self.fthruster1.setValue(val)
-        self.fthruster2.setValue(val)
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
+        gripval= self.gripperspinbox.value()
+        fthruster1 = val
+        fthruster2 = val
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
 
     def yawslidercontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.fthruster1.setValue(1500)
-        self.fthruster2.setValue(1500)
         val = self.yawslider.value()
-        self.rthruster.setValue(val)
+        gripval = self.gripperspinbox.value()
+        rthruster = val
         negvalue = val-1500
-        self.lthruster.setValue(1500-negvalue)
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
+        lthruster = (1500-negvalue)
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
+        self.yawslider.setValue(val)
 
     def yawspinboxcontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.fthruster1.setValue(1500)
-        self.fthruster2.setValue(1500)
         val = self.yawspinbox.value()
-        self.rthruster.setValue(val)
+        gripval = self.gripperspinbox.value()
+        rthruster = val
         negvalue = val-1500
-        self.lthruster.setValue(1500-negvalue)
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
+        lthruster = (1500-negvalue)
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
 
     def swayslidercontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.fthruster1.setValue(1500)
-        self.fthruster2.setValue(1500)
         val = self.swayslider.value()
-        self.rthruster.setValue(val)
-        self.lthruster.setValue(val)
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
+        gripval = self.gripperspinbox.value()
+        rthruster = val
+        lthruster = val
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
+        self.swayslider.setValue(val)
 
     def swayspinboxcontrol(self):
-        self.dthruster1.setValue(1500)
-        self.dthruster2.setValue(1500)
-        self.fthruster1.setValue(1500)
-        self.fthruster2.setValue(1500)
         val = self.swayspinbox.value()
-        self.rthruster.setValue(val)
-        self.lthruster.setValue(val)
-        ser.write((str(self.fthruster1.value()) + str(self.fthruster2.value()) + str(self.lthruster.value()) + str(self.rthruster.value()) + str(self.dthruster1.value()) + str(self.dthruster2.value()) + str(self.gripperslider.value()) + '/').encode())
+        gripval = self.gripperspinbox.value()
+        rthruster = val
+        lthruster = val
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
+        
+    def heaveslidercontrol(self):
+        val = self.heaveslider.value()
+        gripval = self.gripperspinbox.value()
+        dthruster1 = val
+        dthruster2 = val
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
+
+    def heavespinboxcontrol(self):
+        val = self.heavespinbox.value()
+        gripval = self.gripperspinbox.value()
+        dthruster1 = val
+        dthruster2 = val
+        ser.write((str(fthruster1) + str(fthruster2) + str(lthruster) + str(rthruster) + str(dthruster1) + str(dthruster2) + str(gripval) + '/').encode())
+
+    def update_surgespinbox(self):
+        val = self.surgeslider.value()
+        self.surgespinbox.setValue(val)
+
+    def update_yawspinbox(self):
+        val = self.yawslider.value()
+        self.yawspinbox.setValue(val)
+
+    def update_swayspinbox(self):
+        val = self.swayslider.value()
+        self.swayspinbox.setValue(val)
+
+    def update_gripperspinbox(self):
+        val = self.gripperslider.value()
+        self.gripperspinbox.setValue(val)
+
+    def update_heavespinbox(self):
+        val = self.heaveslider.value()
+        self.heavespinbox.setValue(val)
 
     def killswitchcontrol(self):
         pass
@@ -317,12 +349,6 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Bright"))
         self.label_4.setText(_translate("MainWindow", "90"))
         self.label_5.setText(_translate("MainWindow", "135"))
-        self.label_6.setText(_translate("MainWindow", "Forward"))
-        self.label_7.setText(_translate("MainWindow", "BottomF"))
-        self.label_8.setText(_translate("MainWindow", "BottomB"))
-        self.label_9.setText(_translate("MainWindow", "Backward"))
-        self.label_10.setText(_translate("MainWindow", "Left"))
-        self.label_11.setText(_translate("MainWindow", "Right"))
         self.killswitch.setText(_translate("MainWindow", "Kill Switch"))
         self.label_3.setText(_translate("MainWindow", "Surge"))
         self.label_12.setText(_translate("MainWindow", "    Yaw"))
